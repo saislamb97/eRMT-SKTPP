@@ -1,0 +1,44 @@
+📋 Borang Invoice Page Analysis
+Purpose/Target:
+The Invoice page is designed to:
+
+Generate billing invoices for daily meal orders
+List students who received lunch today (from canteen records)
+Calculate totals based on price per meal
+Save invoices to the database
+Send notifications to the Finance Department for verification
+Print invoices for physical records
+Current Workflow:
+Load Data → Fetches today's canteen records where lunchReceived = true
+Review → Shows list of students with quantity and pricing
+Save Invoice → Stores invoice in database
+Send for Verification → Creates notification for finance team
+Print → Opens print preview in new window
+⚠️ Issues & Confusing Functionalities:
+Issue	Description	Suggestion
+1. Duplicate Save Actions	"Save Invoice" and "Send for Verification" are separate, but sending should require saving first. Currently, you can send without saving.	Combine into one flow: Save → then prompt to send
+2. No Loading State	Table shows no spinner while fetching students	Add loading spinner like canteen page
+3. Invoice Number Auto-Generation Fails Silently	If invoices collection doesn't exist, it defaults to INV-0001 but user doesn't know	Show info message about new invoice series
+4. Send to Finance Logic is Incomplete	sendToFinanceConfirmed sends notification to allTeachers[0] (first teacher) instead of a specific finance role	Should filter by role or have a dedicated finance recipient
+5. No Date Range Filter	Always loads "today" only - can't generate invoice for past dates	Add date picker to select date range
+6. Can't Edit Quantity	Quantity is hardcoded to 1 per student	Allow editing quantity per student
+7. Status Always "Pending Verification"	Status is just a display label, doesn't reflect actual invoice status	Connect to actual invoice status from DB
+8. View Button Goes to Non-Existent Route	router.push(/borang/invoice/${inv.id}) in view page - no dynamic route exists	Create page.jsx or remove View button
+9. No Delete/Edit for Saved Invoices	Once saved, invoices can't be edited or deleted	Add edit/delete functionality in view page
+10. Print Opens in New Tab	Print preview opens window.open() which may be blocked by browsers	Consider in-page preview modal
+🎯 Recommendations (Priority Order):
+High Priority:
+
+Add loading spinner for data fetching
+Fix "Send for Verification" to require saving first (or auto-save before sending)
+Create the missing invoice detail page (page.jsx)
+Medium Priority:
+
+Add date range picker for historical invoices
+Allow quantity editing per student
+Fix notification recipient logic (use role-based filtering)
+Low Priority:
+
+Add invoice edit/delete in repository
+In-page print preview instead of new window
+Add export to PDF option

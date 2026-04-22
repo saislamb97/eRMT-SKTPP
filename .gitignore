@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+
+# Environment variables (SECRET - never upload)
+.env.local
+.env
+
+# PocketBase (we're replacing this anyway)
+pb_data/
+pb_hooks/
+pb_migrations/
+pocketbase
+pocketbase.exe
+
+# Editor
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db

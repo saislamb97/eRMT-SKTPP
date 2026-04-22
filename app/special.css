@@ -1,0 +1,710 @@
+/* ===== ROOT VARIABLES ===== */
+:root {
+  --auth-bg: #fffaf0;
+  --auth-text: #463949;
+  --auth-primary: #facc15;
+  --auth-primary-soft: rgba(254, 210, 89, 0.85);
+  --auth-primary2: #b91c1c;
+  --auth-primary2-soft: rgba(236, 114, 80, 0.8);
+  --auth-radius: 20px;
+  --auth-radius-soft: 10px;
+}
+
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--auth-text);
+  background: radial-gradient(1200px 500px at 10% 10%, rgba(83, 7, 213, 0.22), transparent 70%),
+    radial-gradient(900px 600px at 90% 35%, rgba(177, 0, 50, 0.22), transparent 70%),
+    radial-gradient(900px 600px at 30% 90%, rgba(249, 158, 0, 0.22), transparent 80%),
+    var(--auth-bg);
+  overflow-x: hidden;
+  cursor: default; /* FIXED: Set default cursor globally */
+}
+
+/* ===== AUTH AVATAR ===== */
+.auth-avatar-wrap {
+  height: 130px !important;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-avatar {
+  width: 180px !important;
+  height: 130px;
+  position: relative;
+}
+
+/* ===== AUTH WELCOME ===== */
+.auth-welcome {
+  font-size: 35px;
+  font-weight: 400;
+  margin: 5px;
+  background: linear-gradient(135deg, var(--auth-text), var(--auth-primary2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 5px;
+  background: linear-gradient(135deg, var(--auth-text), var(--auth-primary2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== AUTH GLASS CARD ===== */
+.auth-card {
+  position: relative;
+  border-radius: var(--auth-radius);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default; /* FIXED: Ensure default cursor */
+}
+
+/* FIXED: Remove hover transform that might trigger cursor changes */
+.auth-card:hover {
+  /* transform: translateY(-2px); */ /* Removed - causes layout shifts */
+}
+
+.auth-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18));
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  cursor: default; /* FIXED: Ensure default cursor */
+}
+
+.auth-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05));
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default; /* FIXED: Ensure pseudo-element doesn't interfere */
+}
+
+.auth-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  cursor: default; /* FIXED: Ensure pseudo-element doesn't interfere */
+}
+
+/* ===== STRONGER GLASS FOR POPUPS/SECTIONS ===== */
+.auth-popup {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.88),
+    rgba(255, 255, 255, 0.75)
+  ) !important;
+
+  backdrop-filter: blur(20px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--auth-radius);
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.auth-popup:hover {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ===== SAVE BUTTON (CANTEEN) ===== */
+.auth-btn-save {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: var(--auth-radius-soft);
+  font-weight: 500;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  color: white;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.95),   /* emerald */
+    rgba(34, 197, 94, 0.95)
+  );
+
+  box-shadow:
+    0 10px 20px rgba(16, 185, 129, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+  transition: all 0.2s ease;
+  cursor: pointer; /* FIXED: Explicit pointer for buttons */
+}
+
+.auth-btn-save:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 28px rgba(16, 185, 129, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.auth-btn-save:disabled {
+  background: linear-gradient(
+    135deg,
+    rgba(148, 163, 184, 0.8),
+    rgba(148, 163, 184, 0.6)
+  );
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+/* ===== AUTH INPUTS ===== */
+.auth-input {
+  width: 100%;
+  height: 40px;
+  padding: 0px 15px;
+  margin: 5px 0px;
+  border-radius: var(--auth-radius-soft);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  outline: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: text; /* FIXED: Explicit text cursor for inputs */
+}
+
+.auth-input::placeholder {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.auth-input:focus {
+  border-color: rgba(185, 28, 28, 0.5);
+  box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.12), 0 4px 12px rgba(185, 28, 28, 0.08);
+  transform: translateY(-1px);
+}
+
+.auth-input:focus::placeholder {
+  opacity: 0.7;
+}
+
+/* ===== FORCE CONSISTENT INPUT STYLE (AUTOFILL FIX) ===== */
+.auth-input,
+.auth-input:focus,
+.auth-input:active,
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  font-family: inherit !important;
+  font-size: 15px !important;
+  line-height: normal !important;
+  color: var(--auth-text) !important;
+
+  -webkit-text-fill-color: var(--auth-text) !important;
+
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* ===== AUTH SELECT (DROPDOWN) ===== */
+.auth-input select,
+select.auth-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #b91c1c 50%),
+    linear-gradient(135deg, #b91c1c 50%, transparent 50%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4));
+  background-position:
+    calc(100% - 18px) 16px,
+    calc(100% - 13px) 16px,
+    calc(100% - 40px) 50%;
+  background-size:
+    6px 6px,
+    6px 6px,
+    1px 60%;
+  background-repeat: no-repeat;
+
+  padding-right: 44px;
+  cursor: pointer;
+}
+
+/* ===== AUTH SELECT ROUND & SOFT ===== */
+select.auth-input {
+  cursor: pointer;
+  height: 43px;
+  border-radius: var(--auth-radius-soft);
+  border: 2px solid rgba(185, 28, 28, 0.25);
+
+  background-color: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.05);
+
+  transition: all 0.25s ease;
+}
+
+/* Selected / hovered option */
+select.auth-input option:checked,
+select.auth-input option:hover {
+  background-color: rgba(255, 201, 191, 0.866);
+  color: #5b1a1a;
+}
+
+.auth-label {
+    border: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.6;
+    font-weight: 400;
+    padding: 5px;
+    font-family: inherit;
+    color: rgb(109, 4, 66);
+    cursor: default; /* FIXED: Ensure default cursor */
+}
+
+.auth-label-small {
+    border: 0;
+    width: 100%;
+    font-size: 12px;
+    opacity: 0.3;
+    font-weight: 400;
+    padding: 5px;
+    font-family: inherit;
+    color: rgb(37, 3, 3);
+    cursor: default; /* FIXED: Ensure default cursor */
+}
+
+/* ===== AUTH BUTTONS ===== */
+.auth-btn {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  border-radius: var(--auth-radius-soft);
+  font-weight: 450;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-btn-primary {
+  color: white;
+
+  background: linear-gradient(135deg, var(--auth-primary-soft), var(--auth-primary2-soft));
+  box-shadow: 0 12px 24px rgba(185, 28, 28, 0.3), 0 2px 2px rgba(185, 28, 28, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer; /* FIXED: Explicit pointer for buttons */
+}
+
+.auth-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* FIXED: Prevent pseudo-element from interfering */
+}
+
+.auth-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(185, 28, 28, 0.35), 0 4px 6px rgba(185, 28, 28, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.auth-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.28), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.auth-btn-small {
+  height: 40px;
+  width: 120px;
+  padding: 10px;
+  border: 0;
+  border-radius: var(--auth-radius-soft);
+  font-weight: 450;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-btn-small-alt {
+  height: 40px;
+  width: 120px;
+  padding: 10px;
+
+  border: 1px solid rgba(185, 28, 28, 0.25);
+  border-radius: var(--auth-radius-soft);
+
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 240, 240, 0.9)
+  );
+  color: #7a1f1f;
+
+  box-shadow:
+    0 4px 12px rgba(185, 28, 28, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  transition: all 0.2s ease;
+}
+
+.auth-btn-small-alt:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 230, 230, 0.95)
+  );
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 16px rgba(185, 28, 28, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.auth-btn-small-alt:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 8px rgba(185, 28, 28, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== AUTH PURPLE BUTTON ===== */
+.auth-btn-purple {
+  color: white;
+  height: 45px;
+  background: linear-gradient(
+    135deg,
+    rgba(43, 7, 206, 0.95),   /* purple-600 */
+    rgba(165, 70, 254, 0.95)    /* purple-500 */
+  );
+
+  box-shadow:
+    0 14px 20px rgba(124, 58, 237, 0.35),
+    0 4px 8px rgba(124, 58, 237, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer; /* FIXED: Explicit pointer for buttons */
+}
+
+.auth-btn-purple::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* FIXED: Prevent pseudo-element from interfering */
+}
+
+.auth-btn-purple:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+    0 10px 20px rgba(124, 58, 237, 0.45),
+    0 6px 12px rgba(124, 58, 237, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.auth-btn-purple:hover::before {
+  opacity: 1;
+}
+
+.auth-btn-purple:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 18px rgba(124, 58, 237, 0.35),
+    inset 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ===== AUTH LINK BUTTONS ===== */
+.auth-link {
+  background: none;
+  border: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.6;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 3px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: rgb(109, 4, 66);
+}
+
+.auth-link:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+/* ===== VERIFY PAGE LAYOUT ===== */
+.verify-page {
+  min-height: 80vh;              /* keeps it centered even with sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ===== VERIFY CARD (SQUARE LOOK) ===== */
+.verify-card {
+  width: min(420px, 92vw);
+  border-radius: var(--auth-radius-soft);
+  padding: 28px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Error */
+.verify-error {
+  text-align: center;
+  font-size: 13px;
+  color: #b91c1c;
+  opacity: 0.9;
+  margin-top: 6px;
+}
+
+
+/* ===== AUTH FOOTER ===== */
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.5;
+  font-weight: 400;
+  padding: 20px;
+  transition: opacity 0.3s ease;
+  color: rgb(84, 4, 28);
+}
+
+/* ===== HELPER CLASSES ===== */
+.gap-16 {
+  height: 16px;
+}
+
+.gap-20 {
+  height: 24px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .auth-login-card {
+    padding: 32px 24px;
+  }
+  .auth-welcome-title {
+    font-size: 28px;
+  }
+  .auth-avatar {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* ===== SCREEN QR GRID ===== */
+
+.qr-print-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.qr-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: default; /* FIXED: Ensure default cursor */
+}
+
+.qr-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 180px;
+  max-height: 180px;
+}
+
+.qr-info {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.qr-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.qr-grade {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.qr-id {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ===== GLOBAL SMOOTH TRANSITIONS ===== */
+.auth-card,
+.auth-glass,
+.auth-input,
+.auth-btn,
+.auth-btn-primary,
+.auth-btn-purple,
+.auth-btn-small,
+.auth-btn-small-alt,
+.auth-btn-save {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== FORM SECTION STYLING ===== */
+.form-section {
+  border-radius: var(--auth-radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.4)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.form-section:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.5)
+  );
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.status-badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* ===== SMOOTH FADE IN ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===== ATTENDANCE PAGE SPECIFIC FIXES ===== */
+#qr-reader {
+  cursor: default !important; /* FIXED: Override any inherited cursor */
+}
+
+#qr-reader * {
+  cursor: default !important; /* FIXED: Override cursor on all children */
+}
+
+/* FIXED: Ensure video element doesn't change cursor */
+#qr-reader video {
+  cursor: default !important;
+  pointer-events: none; /* Prevent any mouse events on video */
+}
+
+/* FIXED: Prevent any transitions from affecting cursor */
+div[style*="cursor"] {
+  cursor: default !important;
+}
