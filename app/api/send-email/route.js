@@ -1,65 +1,69 @@
+// app/api/send-email/route.js
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+
+export const runtime = "nodejs";
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
+
+function htmlToText(html = "") {
+  return String(html)
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n\n")
+    .replace(/<\/div>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .trim();
+}
 
 export async function POST(request) {
   try {
-    const { to, subject, html } = await request.json();
+    const { to, subject, html, text } = await request.json();
 
     if (!to || !subject || !html) {
-      console.error("Missing required fields");
       return NextResponse.json(
         { error: "Missing required fields: to, subject, html" },
         { status: 400 }
       );
     }
 
-    if (!process.env.BREVO_API_KEY) {
-      console.error("BREVO_API_KEY not configured");
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
       return NextResponse.json(
         { error: "Email service not configured" },
         { status: 500 }
       );
     }
 
-    console.log("Sending email to:", to);
-
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "accept": "application/json",
-        "api-key": process.env.BREVO_API_KEY,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        sender: {
-          name: "e-RMT",
-          email: process.env.EMAIL_FROM
-        },
-        to: [{ email: to }],
-        subject: subject,
-        htmlContent: html
-      }),
+    const info = await transporter.sendMail({
+      from: `"e-RMT" <${process.env.GMAIL_USER}>`,
+      replyTo: process.env.GMAIL_USER,
+      to,
+      subject,
+      text: text || htmlToText(html),
+      html,
     });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      console.error("Brevo API error:", result);
-      return NextResponse.json(
-        { error: result.message || "Failed to send email" },
-        { status: response.status }
-      );
-    }
-
-    console.log("✅ Email sent successfully:", result.messageId);
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      messageId: result.messageId 
+      messageId: info.messageId,
     });
-
   } catch (error) {
-    console.error("❌ Email error:", error);
+    console.error("Email error:", error);
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message || "Failed to send email" },
       { status: 500 }
     );
   }
