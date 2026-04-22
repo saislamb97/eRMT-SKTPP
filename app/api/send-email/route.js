@@ -1,4 +1,13 @@
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export async function POST(request) {
   try {
@@ -12,8 +21,8 @@ export async function POST(request) {
       );
     }
 
-    if (!process.env.BREVO_API_KEY) {
-      console.error("BREVO_API_KEY not configured");
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.error("Gmail SMTP credentials not configured");
       return NextResponse.json(
         { error: "Email service not configured" },
         { status: 500 }
@@ -22,44 +31,23 @@ export async function POST(request) {
 
     console.log("Sending email to:", to);
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "accept": "application/json",
-        "api-key": process.env.BREVO_API_KEY,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        sender: {
-          name: "e-RMT",
-          email: process.env.EMAIL_FROM
-        },
-        to: [{ email: to }],
-        subject: subject,
-        htmlContent: html
-      }),
+    const info = await transporter.sendMail({
+      from: `"e-RMT" <${process.env.GMAIL_USER}>`,
+      to,
+      subject,
+      html,
     });
 
-    const result = await response.json();
+    console.log("✅ Email sent successfully:", info.messageId);
 
-    if (!response.ok) {
-      console.error("Brevo API error:", result);
-      return NextResponse.json(
-        { error: result.message || "Failed to send email" },
-        { status: response.status }
-      );
-    }
-
-    console.log("✅ Email sent successfully:", result.messageId);
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      messageId: result.messageId 
+      messageId: info.messageId,
     });
-
   } catch (error) {
     console.error("❌ Email error:", error);
     return NextResponse.json(
-      { error: error.message },
+      { error: error.message || "Failed to send email" },
       { status: 500 }
     );
   }
